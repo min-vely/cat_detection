@@ -1,4 +1,3 @@
-
 import os
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
@@ -6,6 +5,9 @@ from ultralytics import YOLO
 import yaml
 
 app = Flask(__name__)
+
+# --- Model is no longer loaded here ---
+model = None
 
 # Dictionary to map class names to Korean descriptions
 KOREAN_DESCRIPTIONS = {
@@ -16,9 +18,6 @@ KOREAN_DESCRIPTIONS = {
     'cat_standing': '서 있을 거에요',
     'cat_yawning': '졸릴 거에요'
 }
-
-# Load YOLO model
-model = YOLO('best.pt')
 
 # Load class names from data.yaml
 with open('data.yaml', 'r', encoding='utf-8') as f:
@@ -31,6 +30,13 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    global model  # Use the global model variable
+    # --- Lazy load the model if it hasn't been loaded yet ---
+    if model is None:
+        print("Loading model for the first time...")
+        model = YOLO('best.pt')
+        print("Model loaded.")
+
     if 'file' not in request.files:
         return redirect(request.url)
     file = request.files['file']

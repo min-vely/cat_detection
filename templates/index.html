@@ -1,52 +1,142 @@
-
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>집사야 뭘 쳐다보냥</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Bazzi';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/Bazzi.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
         body {
-            font-family: sans-serif;
+            font-family: 'Bazzi', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #f0f2f5;
+            background-color: #fff0e6; /* Soft peach background */
+            margin: 0;
         }
         .container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fffafa; /* Snow white */
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             text-align: center;
+            border: 2px solid #ffc8dd; /* Pastel pink border */
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #d98b8b; /* Dusty rose color */
+            font-size: 2.5rem;
+        }
+        h2 {
+            color: #d98b8b;
         }
         img {
-            max-width: 500px;
-            margin-top: 1rem;
-            border-radius: 8px;
+            max-width: 100%;
+            margin-top: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid #ffc8dd;
         }
+        form {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        /* Custom File Input */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+            background-color: #ffc8dd;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .file-input-wrapper:hover {
+            background-color: #fca5c5; /* Darker pink on hover */
+        }
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        #fileName {
+            margin-top: 0.5rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        input[type="submit"] {
+            background-color: #a2d2ff; /* Pastel blue */
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-family: 'Bazzi', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #6aa8ff; /* Darker blue on hover */
+        }
+
         .predictions {
-            margin-top: 1rem;
+            margin-top: 2rem;
             text-align: left;
+        }
+        .predictions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .predictions li {
+            background-color: #e6f7ff; /* Light blue background for items */
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 5px solid #a2d2ff; /* Pastel blue border-left */
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>집사야 뭘 쳐다보냥</h1>
-        <form method="post" action="/predict" enctype="multipart/form-data">
-            <input type="file" name="file" id="fileInput">
-            <input type="submit" value="Upload">
+        <form id="uploadForm" method="post" action="/predict" enctype="multipart/form-data">
+            <label class="file-input-wrapper">
+                파일 선택
+                <input type="file" name="file" id="fileInput" accept="image/*">
+            </label>
+            <span id="fileName">선택된 파일 없음</span>
+            <input type="submit" value="업로드">
         </form>
 
         <div id="imagePreview"></div>
 
         {% if filename %}
-            <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded Image">
+            <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Analyzed Image">
             <div class="predictions">
                 <h2>지금 우리 고양이는...</h2>
                 <ul>
@@ -62,30 +152,37 @@
         const fileInput = document.getElementById('fileInput');
         const imagePreview = document.getElementById('imagePreview');
         const container = document.querySelector('.container');
+        const fileNameSpan = document.getElementById('fileName');
+        const uploadForm = document.getElementById('uploadForm');
 
         fileInput.addEventListener('change', function() {
             const file = this.files[0];
 
-            // Clear previous results when a new file is selected
+            // Clear previous results
             const oldPredictions = document.querySelector('.predictions');
-            if (oldPredictions) {
-                oldPredictions.remove();
-            }
-            const oldImage = container.querySelector('img');
-            if (oldImage) {
-                oldImage.remove();
-            }
+            if (oldPredictions) oldPredictions.remove();
+            const oldImage = container.querySelector('img[alt="Analyzed Image"]');
+            if (oldImage) oldImage.remove();
             imagePreview.innerHTML = '';
-
+            fileNameSpan.textContent = '선택된 파일 없음';
 
             if (file) {
+                fileNameSpan.textContent = file.name;
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const img = document.createElement('img');
                     img.src = e.target.result;
+                    img.alt = 'Image Preview';
                     imagePreview.appendChild(img);
                 }
                 reader.readAsDataURL(file);
+            }
+        });
+
+        uploadForm.addEventListener('submit', function(event) {
+            if (fileInput.files.length === 0) {
+                event.preventDefault();
+                alert('파일을 선택해주세요!');
             }
         });
     </script>

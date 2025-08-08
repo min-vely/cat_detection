@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 6
+names: ['cat_eating', 'cat_lying', 'cat_sitting', 'cat_sleeping', 'cat_standing', 'cat_yawning']
+
+roboflow:
+  workspace: haku-vjtiq
+  project: haku-merge_v2-sxixd
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/haku-vjtiq/haku-merge_v2-sxixd/dataset/1

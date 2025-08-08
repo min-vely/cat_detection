@@ -1,0 +1,93 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>집사야 뭘 쳐다보냥</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        img {
+            max-width: 500px;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+        .predictions {
+            margin-top: 1rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>집사야 뭘 쳐다보냥</h1>
+        <form method="post" action="/predict" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput">
+            <input type="submit" value="Upload">
+        </form>
+
+        <div id="imagePreview"></div>
+
+        {% if filename %}
+            <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded Image">
+            <div class="predictions">
+                <h2>지금 우리 고양이는...</h2>
+                <ul>
+                    {% for prediction in predictions %}
+                        <li>{{ prediction }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const container = document.querySelector('.container');
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+
+            // Clear previous results when a new file is selected
+            const oldPredictions = document.querySelector('.predictions');
+            if (oldPredictions) {
+                oldPredictions.remove();
+            }
+            const oldImage = container.querySelector('img');
+            if (oldImage) {
+                oldImage.remove();
+            }
+            imagePreview.innerHTML = '';
+
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imagePreview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

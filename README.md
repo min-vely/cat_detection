@@ -14,7 +14,7 @@
 - 고양이 이미지를 업로드하면 학습된 YOLO11 모델이 해당 이미지에서 고양이의 행동을 예측합니다. 
 
 
-![집사야 뭘 쳐다보냥 gif](.READMEFiles/jipsa.gif)
+![집사야 뭘 쳐다보냥 gif](./READMEFiles/jipsa.gif)
 
 
 [🎞️시연 영상 링크](https://youtu.be/OoCMH8PNAOM)
@@ -24,7 +24,7 @@
 ## 🌐 웹사이트 주소
 
 
-[집사야 뭘 쳐다보냥](https://flask-chat-app-915768071749.asia-northeast3.run.app/)
+[집사야 뭘 쳐다보냥😺](https://flask-chat-app-915768071749.asia-northeast3.run.app/)
 - GCP에 배포는 성공하였으나 서버 비용 등의 문제로 인해 런타임을 중지시킨 상태입니다. 
 
 
@@ -89,7 +89,7 @@
 
 ---
 ## 📉 모델링 결과
-![모델링 결과 png](.READMEFiles/results.png)
+![모델링 결과 png](./READMEFiles/results.png)
 - YOLO11s segment 모델로 학습한 결과 박스, Seg 마스크, 클래스 등의 손실은 학습이 진행될수록 작아지고, 정밀도, 재현율 등은 0.9 즈음으로 수렴함
 
     - 정밀도 : 모델이 고양이라고 예측한 것 중 실제로 고양이가 맞은 비율
@@ -98,7 +98,7 @@
 
 
 
-![모델링 결과2 png](.READMEFiles/results2.png)
+![모델링 결과2 png](./READMEFiles/results2.png)
 - Validation 데이터로 YOLO 모델을 검증해본 결과 cat_lying에서 가장 낮은 성능을 보임
 
 - 고양이의 눕는 자세가 다양하거나, sleeping과 같은 다른 클래스와 혼동했기 때문이라고 생각됨
@@ -112,12 +112,12 @@
 
 | 하쿠 이미지만 사용했을 때 | 다른 고양이 이미지도 사용했을 때 |
 | :-:  | :-: |
-| ![테스트 결과 png](.READMEFiles/test1.png) | ![테스트 결과2 png](.READMEFiles/test2.png) |
-| ![테스트 결과3 png](.READMEFiles/test3.png) | ![테스트 결과4 png](.READMEFiles/test4.png) |
-| ![테스트 결과5 png](.READMEFiles/test5.png) | ![테스트 결과6 png](.READMEFiles/test6.png) |
-| ![테스트 결과7 png](.READMEFiles/test7.png) | ![테스트 결과8 png](.READMEFiles/test8.png) |
-| ![테스트 결과9 png](.READMEFiles/test9.png) | ![테스트 결과10 png](.READMEFiles/test10.png) |
-| ![테스트 결과11 png](.READMEFiles/test11.png) | ![테스트 결과12 png](.READMEFiles/test12.png) |
+| ![테스트 결과 png](./READMEFiles/test1.png) | ![테스트 결과2 png](./READMEFiles/test2.png) |
+| ![테스트 결과3 png](./READMEFiles/test3.png) | ![테스트 결과4 png](./READMEFiles/test4.png) |
+| ![테스트 결과5 png](./READMEFiles/test5.png) | ![테스트 결과6 png](./READMEFiles/test6.png) |
+| ![테스트 결과7 png](./READMEFiles/test7.png) | ![테스트 결과8 png](./READMEFiles/test8.png) |
+| ![테스트 결과9 png](./READMEFiles/test9.png) | ![테스트 결과10 png](./READMEFiles/test10.png) |
+| ![테스트 결과11 png](./READMEFiles/test11.png) | ![테스트 결과12 png](./READMEFiles/test12.png) |
 | 테스트 데이터 정답률 3/8 | 테스트 데이터 정답률 6/8 |
 
 
@@ -128,31 +128,31 @@
 - 고양이에만 초점이 맞추어져 있어 강아지와 고양이가 같이 있는 사진에서 개를 고양이로 판단함
 
 
-![한계1 png](.READMEFiles/limit1.png)
+![한계1 png](./READMEFiles/limit1.png)
 
 
 - 객체가 두 마리 이상인 경우를 잘 구분하지 못할 때가 있음
 
 
-![한계2 png](.READMEFiles/limit2.png)
+![한계2 png](./READMEFiles/limit2.png)
 
 
-![한계3 png](.READMEFiles/test11.png)
+![한계3 png](./READMEFiles/test11.png)
 
 
-![한계3_1 png](.READMEFiles/test12.png)
+![한계3_1 png](./READMEFiles/test12.png)
 
 
 - 두 가지 행동 양상이 동시에 나타날 경우 모델이 오답을 보임
 
 
-![한계4 png](.READMEFiles/test2.png)
+![한계4 png](./READMEFiles/test2.png)
 
 
 - 각 클래스별 이미지 개수가 균일하지 않음
 
 
-![한계5 png](.READMEFiles/limit5.png)
+![한계5 png](./READMEFiles/limit5.png)
 
 
 
